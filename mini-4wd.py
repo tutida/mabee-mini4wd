@@ -7,10 +7,11 @@ import paho.mqtt.client as mqtt
 import json
 import time
 
-TOKEN = "token_YrIVwpnLhgF1aVDN"
-TOPIC = "mabeee/hoge"
+TOKEN = "token_oGASkTyGpKhRtDhN"
+TOPIC = "mini4ku/action"
 BASEURL = 'http://localhost:11111'
 MAGNUM_SPEED = 0
+
 
 # ------------------------------------------------------
 # On Connect
@@ -22,28 +23,26 @@ def on_connect(client, userdata, flags, respons_code):
 # On Message
 def on_message(client, userdata, msg):
     print(msg.topic + " " + str(msg.payload))
+    data = json.loads(msg.payload.decode("utf-8"))["data"]
+    print(data)
     forward()
-    # data = json.loads(msg.payload.decode("utf-8"))["data"]
-    # data = {key:value.strip() for key, value in data.items()}
-    # if "room" in data.keys():
-    #     print(data)
 
 # ------------------------------------------------------
 # Mabee Control
 def forward():
 	global MAGNUM_SPEED
 	if MAGNUM_SPEED <= 100:
-		MAGNUM_SPEED+=10
+		MAGNUM_SPEED+=30
 		if MAGNUM_SPEED > 100:
 			MAGNUM_SPEED = 100
-		url = BASEURL + '/devices/1/set?pwm_duty=' + str(MAGNUM_SPEED)
+		url = BASEURL + '/devices/2/set?pwm_duty=' + str(MAGNUM_SPEED)
 		send_mabeee(url)
 
 def down():
 	global MAGNUM_SPEED
 	if MAGNUM_SPEED != 0:
 		MAGNUM_SPEED-=1
-		url = BASEURL + '/devices/1/set?pwm_duty=' + str(MAGNUM_SPEED)
+		url = BASEURL + '/devices/2/set?pwm_duty=' + str(MAGNUM_SPEED)
 		send_mabeee(url)
 
 def send_mabeee(url):
@@ -66,7 +65,7 @@ client.loop_start()
 
 while True:
 	down()
-	time.sleep(.1)
+	time.sleep(.75)
 
 client.disconnect()
 client.loop_stop()
