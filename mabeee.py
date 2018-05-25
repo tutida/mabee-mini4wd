@@ -11,10 +11,10 @@ if (2 == len(sys.argv)):
     path = sys.argv[1]
 
 url = baseurl + path
-print url
+print(url)
 
 response = requests.get(url)
 
-print response.status_code
+print(response.status_code)
 if (0 < len(response.content)):
-    print json.dumps(json.loads(response.content), indent=4, sort_keys=True)
+    print(json.dumps(json.loads(response.content), indent=4, sort_keys=True))
